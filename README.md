@@ -44,7 +44,8 @@ Follow a guide like [fsr-pad-guide](https://github.com/Sereni/fsr-pad-guide) or 
 
 ## UI setup
 1. Install [Python](https://www.python.org/downloads/). On Linux you can install Python with your distribution's package manager. On some systems you might have to additionally install the python3 header files (usually called `python3-dev` or similar).
-1. Install [Node](https://nodejs.org/en/download/)
+1. Install [Node](https://nodejs.org/en/download/) 
+/!\ INSTALL NODE 16, NEWER VERSIONS WILL NOT WORK (for now) 
     - Install [yarn](https://classic.yarnpkg.com/en/docs/install#windows-stable). A quick way to do this is with NPM: `npm install -g yarn`
 1. Within [server.py](./webui/server/server.py), edit the `SERIAL_PORT` constant to match the serial port shown in the Arduino IDE (e.g. it might look like `"/dev/ttyACM0"` or `"COM1"`)
     - You also may need to [modify](https://github.com/teejusb/fsr/pull/1#discussion_r514585060) the `sensor_numbers` variable.
