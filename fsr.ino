@@ -1,3 +1,5 @@
+#include <FastLED.h>
+
 #include <inttypes.h>
 
 #if !defined(__AVR_ATmega32U4__) && !defined(__AVR_ATmega328P__) && \
@@ -53,14 +55,16 @@ const size_t kMaxSharedSensors = 2;
 // Button numbers should start with 1 (Button0 is not a valid Joystick input).
 // Automatically incremented when creating a new SensorState.
 uint8_t curButtonNum = 1;
-
+#define NUM_PIXELS 100
+#define PANELS 4
+int NUM_PANELS = NUM_PIXELS / PANELS;
+CRGB Pad[NUM_PIXELS];
 /*===========================================================================*/
 
 // EXPERIMENTAL. Used to turn on the lights feature. Note, this might conflict
 // some existing sensor pins so if you see some weird behavior it might be
 // because of this. Uncomment the following line to enable the feature.
-
-// #define ENABLE_LIGHTS
+ #define ENABLE_LIGHTS
 
 // We don't want to use digital pins 0 and 1 as they're needed for Serial
 // communication so we start curLightPin from 2.
@@ -232,7 +236,16 @@ class SensorState {
               ButtonPress(buttonNum);
               combined_state_ = SensorState::ON;
               #if defined(ENABLE_LIGHTS)
-                digitalWrite(kLightsPin, HIGH);
+               if (kLightsPin == 2){
+                  fill_solid(Pad, NUM_PANELS , CHSV(210,255,255));
+               }else if (kLightsPin == 3){
+                fill_solid(Pad+NUM_PANELS *2, NUM_PANELS , CHSV(210,255,255));
+               }else if (kLightsPin == 4){
+                fill_solid(Pad+NUM_PANELS *3, NUM_PANELS , CHSV(128,255,255));
+               }else if (kLightsPin == 5){
+                fill_solid(Pad+NUM_PANELS, NUM_PANELS , CHSV(128,255,255));
+               }
+               FastLED.show();
               #endif
             }
           }
@@ -251,7 +264,16 @@ class SensorState {
               ButtonRelease(buttonNum);
               combined_state_ = SensorState::OFF;
               #if defined(ENABLE_LIGHTS)
-                digitalWrite(kLightsPin, LOW);
+               if (kLightsPin == 2){
+                  fill_solid(Pad, NUM_PANELS , CHSV(210,255,0));
+               }else if (kLightsPin == 3){
+                fill_solid(Pad+NUM_PANELS *2, NUM_PANELS , CHSV(210,255,0));
+               }else if (kLightsPin == 4){
+                fill_solid(Pad+NUM_PANELS *3, NUM_PANELS , CHSV(128,255,0));
+               }else if (kLightsPin == 5){
+                fill_solid(Pad+NUM_PANELS, NUM_PANELS , CHSV(128,255,0));
+               }
+               FastLED.show();
               #endif
             }
           }
@@ -560,6 +582,19 @@ unsigned long lastSend = 0;
 long loopTime = -1;
 
 void setup() {
+   FastLED.addLeds<WS2812,7, GRB>(Pad, NUM_PIXELS);
+     for(int i = 0;i < NUM_PANELS;i++){
+    Pad[i] = CRGB::Blue;
+    Pad[i+NUM_PANELS ] = CRGB::Purple;
+    Pad[i+NUM_PANELS * 2] = CRGB::Blue;
+    Pad[i+NUM_PANELS * 3] = CRGB::Purple;
+      FastLED.show();
+  delay(50);
+  }
+  delay(1500);
+  fill_solid(Pad, NUM_PIXELS, CRGB::Black);
+  FastLED.setBrightness(100);
+  FastLED.show();
   serialProcessor.Init(kBaudRate);
   ButtonStart();
   for (size_t i = 0; i < kNumSensors; ++i) {
