@@ -1,11 +1,11 @@
-# Teejusb's FSR Guide
+# Teejusb's FSR Guide (Edited by Tenko)
 A complete software package for FSR dance pads.  
 Join the ![Discord](https://img.shields.io/discord/778312862425939998?color=5865F2&label=Discord&logo=discord&logoColor=white) for any questions/suggestions
 
 ## Features
 - React web UI to customize sensitivity 
 - Profiles & persistence
-- Light support
+- Addressable RGB light support
 
 ## Screenshots
 <img src="./img/fsr2.gif" width="550">
